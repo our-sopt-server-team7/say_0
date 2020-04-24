@@ -46,7 +46,6 @@ var GROUP7 = [
 //위의 JSON 배열 전체 출력
 //console.log(GROUP7);
 //console.log(JSON.stringify(GROUP7));
-//console.log();
 
 var seyoung = { 
     name : '장세영',
