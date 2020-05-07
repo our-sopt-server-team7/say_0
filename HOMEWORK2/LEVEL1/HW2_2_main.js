@@ -1,17 +1,19 @@
-/* ------------------------ */
-/* 2. 계산기 모듈 만들어보기 */
-/* ------------------------ */
+/* --------------- */
+/* 2. 계산기 모듈  */
+/* -------------- */
+
+
 
 const cal = require('./HW2_2_calculator');
 
-var result = cal.sum(14,21);
-console.log("sum result : ", result);
+var sumresult = cal.sum(14,21);
+console.log("sum result : ", sumresult);
 
-var result = cal.sub(71,26);
-console.log("sub result : ", result);
+var subresult = cal.sub(71,26);
+console.log("sub result : ", subresult);
 
-var result = cal.mul(3,7);
-console.log("mul result : ", result);
+var mulresult = cal.mul(3,7);
+console.log("mul result : ", mulresult);
 
-var result = cal.div(121,11);
-console.log("div result : ", result);
+var divresult = cal.div(121,11);
+console.log("div result : ", divresult);
