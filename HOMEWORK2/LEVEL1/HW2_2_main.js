@@ -2,8 +2,6 @@
 /* 2. 계산기 모듈  */
 /* -------------- */
 
-
-
 const cal = require('./HW2_2_calculator');
 
 var sumresult = cal.sum(14,21);
