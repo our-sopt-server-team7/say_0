@@ -4,6 +4,7 @@ let UserModel = require('../models/user');
 let util = require('../modules/util');
 let resMessage = require('../modules/responseMessage');
 let statusCode = require('../modules/statusCode');
+let encrypt = require('../modules/encrypt');
 
 /*
   ✔️ sign up
@@ -33,7 +34,9 @@ router.post('/signup', async(req, res) => {
   }
 
   //2. 새로운 User를 등록한다.
-  UserModel.push({id, name, password, email});
+  const salt = encrypt.getSalt(32);
+  const pw = encrypt.encryption(salt, password);
+  UserModel.push({id, name, pw, salt, email});
 
   //3. 응답 메세지를 보낸다.
   res.status(statusCode.OK).send(util.success(statusCode.OK, resMessage.CREATED_USER, {userID : id}));
@@ -70,13 +73,12 @@ router.post('/signin', async (req, res) => {
   }
 
   // 비밀번호 확인 - 없다면 Miss match password 반환
-  if(user[0].password != password){
+  if(user[0].pw != encrypt.encryption(user[0].salt, password)) {
     res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, resMessage.MISS_MATCH_PW));
     return;
   }
 
-  // 성공 - login success와 함께 user Id 반환
-  //어떤 예외에도 return되지 않았기 때문에 성공. return문 따로 만들 필요 X
+  // 성공 - login success와 함께 user Id 반환 (어떤 예외에도 return되지 않았기 때문에 성공. return문 따로 만들 필요 X)
   res.status(statusCode.OK).send(util.success(statusCode.OK, resMessage.LOGIN_SUCCESS, {userID : id}));
 });
 
