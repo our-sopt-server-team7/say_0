@@ -4,12 +4,11 @@ var router = express.Router();
 router.get('/', (req, res) => {
     const result = {
         status : 200,
-        message : 'api~'
+        message : 'blog~'
     }
     res.status(200).send(result);
 });
 
-router.use('/blog', require('./blog'));
-router.use('/users', require('./users'));
+router.use('/post',require('./post')); //level2,3
 
-module.exports = router;
+module.exports=router;

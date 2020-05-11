@@ -4,9 +4,9 @@ var router = express.Router();
 router.get('/', (req, res) => {
     const result = {
         status : 200,
-        message : 'signup에 접근합니다.'
+        message : 'sigup~'
     }
     res.status(200).send(result);
 });
 
-module.exports = router;
+module.exports=router;
