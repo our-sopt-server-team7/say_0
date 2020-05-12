@@ -107,12 +107,15 @@ router.get('/profile/:id', async (req, res) => {
   }
 
   // 성공 - read profile success와 함께 user Id 반환
-  res.status(statusCode.OK).send(util.success(statusCode.OK, resMessage.READ_PROFILE_SUCCESS, {userID : id})); //name, email 조회 가능하게 하기
+  res.status(statusCode.OK).send(util.success(statusCode.OK, resMessage.READ_PROFILE_SUCCESS, {
+    userID : user[0].id,
+    userNmae : user[0].name,
+    userEmail : user[0].email
+    }
+  )); //name, email 조회 가능하게 하기
 });
 
 module.exports = router;
-
-
 
 
 /*
