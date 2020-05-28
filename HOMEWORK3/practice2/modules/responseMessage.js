@@ -14,5 +14,14 @@ module.exports = {
     MISS_MATCH_PW: "비밀번호가 맞지 않습니다.",
     
     // 프로필 조회
-    READ_PROFILE_SUCCESS: "프로필 조회 성공"
+    READ_PROFILE_SUCCESS: "프로필 조회 성공",
+    
+    //게시글
+    CREATED_POST: "게시글 생성 성공",
+    DELETE_POST: "게시글 삭제 성공",
+    READ_POST_SUCCESS: "게시글 조회 성공",
+    NO_POST: "게시글 없음",
+
+    //DB
+    DB_ERROR: "DB 오류"
 };
