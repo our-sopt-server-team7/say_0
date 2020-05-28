@@ -14,7 +14,7 @@
 | Commentidx | Artricleidx | UserIdx | comment |
 |------------|-------------|---------|---------|
 | 0 | 0 | 0 | 잘 읽고 갑니다 |
-| 1 | 1 | 0 | 랄랄루 좋네요~ |
+| 1 | 0 | 0 | 랄랄루 좋네요~ |
 
 #Like table
 | LikeIdx | Articleidx | Useridx |
