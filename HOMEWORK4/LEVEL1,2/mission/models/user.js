@@ -51,7 +51,7 @@ const user = {
         }
     },
 
-    getUserById : async (Id) => {
+    getUserById : async (id) => {
         const query = `SELECT * FROM ${table} WHERE id = "${id}"`;    //해당 아이디에 해당하는 모든 데이터
         try{
             const result = await pool.queryParam(query);
