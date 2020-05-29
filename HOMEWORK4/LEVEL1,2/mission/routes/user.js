@@ -16,6 +16,9 @@ const statusCode = require('../modules/statusCode');
   RESPONSE DATA : User ID
 */
 
+//models/user.js에서 조건을 모두 설정해두었으므로 이 소스에서는 await UserModel.이름(파라미터)로 사용하면 된다.
+//return값을 t/f로 설정했으므로 if문에 주로 들어감
+
 router.post('/signup', async(req, res) => {
     //1. request body에서 값을 읽어온다.
     const {id, name, password, email} = req.body;
@@ -28,30 +31,27 @@ router.post('/signup', async(req, res) => {
       return;
     }
 
-    /*
     //예외처리2 : 아이디 중복 체크
-    if(UserModel.filter(it => it.id == id). length > 0){
-      //res.status(400).send({message : 'ALREADY ID'});
-      res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, resMessage.ALREADY_ID));
+    if (await UserModel.checkUser(id)) {
+      res.status(statusCode.BAD_REQUEST)
+      .send(util.fail(statusCode.BAD_REQUEST, resMessage.ALREADY_ID));
       return;
     }
-    */
   
     //2. 새로운 User를 등록한다.
     const salt = encrypt.getSalt(32);
     const pw = encrypt.encryption(salt, password);
     //UserModel.push({id, name, salt, pw, email});
-    const idx = await UserModel.signup(id, name, password, salt, email);
+    
+    const idx = await UserModel.signup(id, name, pw, salt, email);  //hased된 pw로 salt와 함께 저장
     if(idx === -1) {
       return res.status(statusCode.DB_ERROR)
       .send(util.fail(statusCode.DB_ERROR, resMessage.DB_ERROR));
     }
-
-    res.status(statusCode.OK)
-    .send(util.success(statusCode.OK, resMessage.CREATED_USER, {userID: idx}));
   
     //3. 응답 메세지를 보낸다.
-    res.status(statusCode.OK).send(util.success(statusCode.OK, resMessage.CREATED_USER, {userID : id}));
+    res.status(statusCode.OK)
+    .send(util.success(statusCode.OK, resMessage.CREATED_USER, {userID: idx}));
   });
   
   
@@ -73,26 +73,28 @@ router.post('/signup', async(req, res) => {
   
     // request data 확인 - 없다면 Null Value 반환
     if(!id || !password){
-      res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
+      res.status(statusCode.BAD_REQUEST)
+      .send(util.fail(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
       return;
     }
   
     // 존재하는 아이디인지 확인 - 없다면 No user 반환
-    const user = UserModel.filter(user => user.id == id);
-    if(user.length == 0){
-      res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, resMessage.NO_USER));
+    if(await UserModel.checkUser(id) == false){
+      res.status(statusCode.BAD_REQUEST)
+      .send(util.fail(statusCode.BAD_REQUEST, resMessage.NO_USER));
       return;
     }
-  
-    //console.log('user[0] : ', user[0]); 이상하면 console 찍어서 확인하기
+    
     // 비밀번호 확인 - 없다면 Miss match password 반환
-    if(user[0].pw != encrypt.encryption(user[0].salt, password)) { //undefined의 toString을 읽을 수 없다는데.. 왜지..?
-      res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, resMessage.MISS_MATCH_PW));
+    if(await UserModel.signin(id, password) == false) {
+      res.status(statusCode.BAD_REQUEST)
+      .send(util.fail(statusCode.BAD_REQUEST, resMessage.MISS_MATCH_PW));
       return;
     }
   
-    // 성공 - login success와 함께 user Id 반환 (어떤 예외에도 return되지 않았기 때문에 성공. return문 따로 만들 필요 X)
-    res.status(statusCode.OK).send(util.success(statusCode.OK, resMessage.LOGIN_SUCCESS, {userID : id}));
+    // 성공 - login success와 함께 user Id 반환
+    res.status(statusCode.OK)
+    .send(util.success(statusCode.OK, resMessage.LOGIN_SUCCESS, {userID : id}));
   });
 
 
@@ -109,19 +111,16 @@ router.get('/profile/:id', async (req, res) => {
     const {id} = req.params;
   
     // 존재하는 아이디인지 확인 - 없다면 No user 반환
-    const user = UserModel.filter(user => user.id == id);
-    if(user.length == 0){
-      res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, resMessage.NO_USER));
+    if(await UserModel.checkUser(id) == false){
+      res.status(statusCode.BAD_REQUEST)
+      .send(util.fail(statusCode.BAD_REQUEST, resMessage.NO_USER));
       return;
     }
   
-    // 성공 - read profile success와 함께 user Id 반환
-    res.status(statusCode.OK).send(util.success(statusCode.OK, resMessage.READ_PROFILE_SUCCESS, {
-      userID : user[0].id,
-      userName : user[0].name,
-      userEmail : user[0].email
-      }
-    ));
+    // 성공 - read profile success와 함께 전체 정보 출력
+    const userprofile = await UserModel.getUserById(id);  //getUserByID(id)의 경우 return 값이 모든 정보였으므로 const 변수에 넣어 사용했음
+    res.status(statusCode.OK)
+    .send(util.success(statusCode.OK, resMessage.LOGIN_SUCCESS, userprofile));
   });
   
   module.exports = router;  
