@@ -23,21 +23,32 @@ router.post('/signup', async(req, res) => {
     //예외처리1 : parameter 체크 - 하나라도 null이나 undefined가 들어올 경우
     if(!id || !name || !password || !email){
       //res.status(400).send('파라미터 값이 잘못되었습니다.');
-      res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, resMessage.NULL_VALUE)); //400은 요청이 잘못됐다는 오류 메세지
+      res.status(statusCode.BAD_REQUEST)
+      .send(util.fail(statusCode.BAD_REQUEST, resMessage.NULL_VALUE)); //400은 요청이 잘못됐다는 오류 메세지
       return;
     }
-  
+
+    /*
     //예외처리2 : 아이디 중복 체크
     if(UserModel.filter(it => it.id == id). length > 0){
       //res.status(400).send({message : 'ALREADY ID'});
       res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, resMessage.ALREADY_ID));
       return;
     }
+    */
   
     //2. 새로운 User를 등록한다.
     const salt = encrypt.getSalt(32);
     const pw = encrypt.encryption(salt, password);
-    UserModel.push({id, name, salt, pw, email}); //field를 미리 넣어줘야 undefined가 되지 않는다
+    //UserModel.push({id, name, salt, pw, email});
+    const idx = await UserModel.signup(id, name, password, salt, email);
+    if(idx === -1) {
+      return res.status(statusCode.DB_ERROR)
+      .send(util.fail(statusCode.DB_ERROR, resMessage.DB_ERROR));
+    }
+
+    res.status(statusCode.OK)
+    .send(util.success(statusCode.OK, resMessage.CREATED_USER, {userID: idx}));
   
     //3. 응답 메세지를 보낸다.
     res.status(statusCode.OK).send(util.success(statusCode.OK, resMessage.CREATED_USER, {userID : id}));
