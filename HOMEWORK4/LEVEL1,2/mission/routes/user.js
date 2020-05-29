@@ -123,4 +123,4 @@ router.get('/profile/:id', async (req, res) => {
     .send(util.success(statusCode.OK, resMessage.LOGIN_SUCCESS, userprofile));
   });
   
-  module.exports = router;  
+  module.exports = router;
