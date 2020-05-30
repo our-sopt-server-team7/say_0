@@ -13,7 +13,6 @@ const user = {
         try {
             const result = await pool.queryParamArr(query, values);
             const insertId = result.insertId;   //삽입할 때 AI됨.
-            console.log(insertId);
             return insertId;
         } catch (err) {
             if (err.errno == 1062) {
@@ -42,7 +41,7 @@ const user = {
         const query = `SELECT salt, password FROM ${table} WHERE id = "${id}"`; //id에 해당하는 tuple의 salt, password 값 탐색
         try{
             const result = await pool.queryParam(query);
-            const pw = encrypt.encryption(result[0].salt, password);    //암호화된 pw 생성
+            const pw = encrypt.encryption(result[0].salt, password); 
             if (result[0].password != pw) {
                 return false;   //만약 pw가 맞지 않다면 false 반환
             }
