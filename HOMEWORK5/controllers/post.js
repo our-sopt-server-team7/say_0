@@ -2,6 +2,7 @@ const util = require('../modules/util');
 const statusCode = require('../modules/statusCode');
 const resMessage = require('../modules/responseMessage');
 const PostModel = require('../models/post');
+const jwt = require('../modules/jwt');
 
 const post = {
     showAllPost : async (req, res) => {
