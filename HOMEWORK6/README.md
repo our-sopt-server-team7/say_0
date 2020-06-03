@@ -3,7 +3,7 @@
 >#### 💻HW SOURCE FILES💻
 >6주차 합동 세미나 관련 HW를 위한 저장소입니다.
 <br> Wiki : [✔WooriBank_API_Wiki](https://github.com/WooriBankClone/WooriBankClone_Server/wiki/%E2%9C%94WooriBank_API)
-<br><br>참여 개발자 : 조현아, 장세영
+<br><br>참여 개발자 : 조현아(@Whgusdk98), 장세영(@Say-young)
 
 #### 
 |Stage|Contents|Done|
