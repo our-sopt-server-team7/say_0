@@ -11,4 +11,4 @@
 |4|Database, RDS|✔|
 |5|보안 - JWT|✔|
 |6|합동세미나(with 클라이언트)|✔|
-|7|Multer, S3||
+|7|Multer, S3|✔|
