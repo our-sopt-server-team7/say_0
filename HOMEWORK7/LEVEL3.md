@@ -3,4 +3,4 @@
 
 > 업로드한 이미지는 요것입니다^^
 </br>
-![4](https://user-images.githubusercontent.com/55133871/84567330-e66e6580-adb2-11ea-9cd9-0d7599e6d620.PNG)
+![4](https://user-images.githubusercontent.com/55133871/84569270-2d168c80-adc0-11ea-8073-0af667fa842f.PNG)
